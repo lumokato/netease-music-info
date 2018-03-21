@@ -12,7 +12,10 @@ def get_html(url):
            'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
                          ' Chrome/35.0.1916.138 Safari/537.36',
            'Referer': 'http://music.163.com/'}
-    content = requests.get(url, headers=hds)
+    proxy = {
+        'http' : '221.0.232.13:61202'
+    }
+    content = requests.get(url, proxies=proxy, headers=hds, timeout=20)
     html_data = content.json()
     return html_data
 
@@ -72,7 +75,7 @@ def get_comment(id_track):
 
 
 if __name__ == '__main__':
-    id_test = '12451165'
+    id_test = '19312'
     # get_track(id_test)
     # get_album(id_test)
     # get_comment(id_test)
