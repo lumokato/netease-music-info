@@ -13,9 +13,9 @@ def get_html(url):
                          ' Chrome/35.0.1916.138 Safari/537.36',
            'Referer': 'http://music.163.com/'}
     proxy = {
-        'http' : '221.0.232.13:61202'
+        'http': '221.0.232.13:61202'
     }
-    content = requests.get(url, proxies=proxy, headers=hds, timeout=20)
+    content = requests.get(url, headers=hds, timeout=20)
     html_data = content.json()
     return html_data
 
@@ -68,6 +68,7 @@ def get_comment(id_track):
     pages = 0
     url_comment = 'http://music.163.com/api/v1/resource/comments/R_SO_4_' \
                   + str(id_track) + '?limit=20&offset=' + str(pages)
+    # url_comment = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(id_track)
     # url_lyric = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
     page_track = get_html(url_comment)
     total_track_comment = page_track['total']
@@ -75,15 +76,9 @@ def get_comment(id_track):
 
 
 if __name__ == '__main__':
-    id_test = '19312'
+    id_test = '30251507'
     # get_track(id_test)
     # get_album(id_test)
-    # get_comment(id_test)
-    total_num_comment = 0
-    id_albums = get_album(id_test)
-    for album in id_albums:
-        id_tracks = get_track(album)
-        for track in id_tracks:
-            total_num_comment += get_comment(track)
-        print(total_num_comment)
-    print(total_num_comment)
+    get_comment(id_test)
+
+
