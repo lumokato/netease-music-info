@@ -69,6 +69,8 @@ def get_comment(id_track):
     url_comment = 'http://music.163.com/api/v1/resource/comments/R_SO_4_' \
                   + str(id_track) + '?limit=20&offset=' + str(pages)
     # url_comment = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(id_track)
+    # url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_30251507/?csrf_token="
+    # first_param = {"uid": "30251508", "offset": "0", "csrf_token": "", "limit": "20"}
     # url_lyric = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
     page_track = get_html(url_comment)
     total_track_comment = page_track['total']
