@@ -5,6 +5,7 @@ import time
 import types
 import requests
 from webapi import *
+from sqlio import *
 
 
 # 根据歌手id获取专辑列表
@@ -12,7 +13,6 @@ def get_album(id_artist):
     url_artist = 'http://music.163.com/api/artist/albums/' + str(id_artist) + '?id='\
                  + str(id_artist) + '&offset=0&total=true&limit=1000'
     data_artist = get_html_pre(url_artist)
-    id_list_album = []
     for dic_album in data_artist['hotAlbums']:
         name_group = dic_album['artist']['name']
         id_group = dic_album['artist']['id']
@@ -20,8 +20,7 @@ def get_album(id_artist):
         id_album = dic_album['id']
         comment_url_album = dic_album['commentThreadId']
         # 将以上信息存入数据库album
-        id_list_album.append(id_album)
-    return id_list_album
+        insert_sql_album(id_album, name_album, id_group, name_group, comment_url_album)
 
 
 # 根据专辑id获取歌曲页面
@@ -65,9 +64,11 @@ def get_comment(id_track):
 
 
 if __name__ == '__main__':
-    id_test = '30251507'
-    # get_track(id_test)
-    # get_album(id_test)
-    get_comment(id_test)
+    create_sql_album()
+    album_data = get_sql_artist()
+    for album in album_data:
+        print(album)
+        get_album(album)
+
 
 
