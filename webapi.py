@@ -1,10 +1,26 @@
-from Crypto.Cipher import AES
 import base64
 import json
 import os
 import binascii
+import requests
+from Crypto.Cipher import AES
 
 
+# 原版API
+def get_html_pre(url):
+    hds = {'Cookie': 'os=pc; osver=Microsoft-Windows-8-Professional-build-9200-64bit; appver=1.5.0.75771;',
+           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                         ' Chrome/35.0.1916.138 Safari/537.36',
+           'Referer': 'http://music.163.com/'}
+    # proxy = {
+    #     'http': '221.0.232.13:61202'
+    # }
+    content = requests.get(url, headers=hds, timeout=20)
+    html_data = content.json()
+    return html_data
+
+
+# 新版API加密算法
 def create_secret_key(size):
     return binascii.hexlify(os.urandom(size))[:16]
 
@@ -40,4 +56,5 @@ def encrypted_request(text):
         'encSecKey': enc_key
     }
     return data
+
 

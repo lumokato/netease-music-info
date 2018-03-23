@@ -4,27 +4,14 @@ import re
 import time
 import types
 import requests
-
-
-# 获取网页信息
-def get_html(url):
-    hds = {'Cookie': 'os=pc; osver=Microsoft-Windows-8-Professional-build-9200-64bit; appver=1.5.0.75771;',
-           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
-                         ' Chrome/35.0.1916.138 Safari/537.36',
-           'Referer': 'http://music.163.com/'}
-    proxy = {
-        'http': '221.0.232.13:61202'
-    }
-    content = requests.get(url, headers=hds, timeout=20)
-    html_data = content.json()
-    return html_data
+from webapi import *
 
 
 # 根据歌手id获取专辑列表
 def get_album(id_artist):
     url_artist = 'http://music.163.com/api/artist/albums/' + str(id_artist) + '?id='\
                  + str(id_artist) + '&offset=0&total=true&limit=1000'
-    data_artist = get_html(url_artist)
+    data_artist = get_html_pre(url_artist)
     id_list_album = []
     for dic_album in data_artist['hotAlbums']:
         name_group = dic_album['artist']['name']
@@ -41,7 +28,7 @@ def get_album(id_artist):
 def get_track(id_album):
     url_album = 'http://music.163.com/api/album/' + str(id_album) + '?ext=true&id='\
                 + str(id_album) + '&offset=0&total=true&limit=1000'
-    data_album = get_html(url_album)
+    data_album = get_html_pre(url_album)
     comment_count_album = data_album['album']['info']['commentCount']
     share_count_album = data_album['album']['info']['shareCount']
     size_album = data_album['album']['size']
@@ -72,7 +59,7 @@ def get_comment(id_track):
     # url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_30251507/?csrf_token="
     # first_param = {"uid": "30251508", "offset": "0", "csrf_token": "", "limit": "20"}
     # url_lyric = 'http://music.163.com/api/song/lyric?os=pc&id=' + str(sid) + '&lv=-1&kv=-1&tv=-1'
-    page_track = get_html(url_comment)
+    page_track = get_html_pre(url_comment)
     total_track_comment = page_track['total']
     return total_track_comment
 
