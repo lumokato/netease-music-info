@@ -4,7 +4,7 @@ import os
 import binascii
 import requests
 from Crypto.Cipher import AES
-
+import datetime
 
 # 原版API
 def get_html_pre(url):
@@ -58,3 +58,36 @@ def encrypted_request(text):
     return data
 
 
+# 新版API
+def get_html(url, req):
+    s = requests.session()
+    s.keep_alive = False
+    hds = {'Cookie': 'os=pc; osver=Microsoft-Windows-8-Professional-build-9200-64bit; appver=1.5.0.75771;',
+           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                         ' Chrome/35.0.1916.138 Safari/537.36',
+           'Referer': 'http://music.163.com/'}
+    proxy = {'http': '222.128.117.99:808'}
+    data = encrypted_request(req)
+    response = requests.post(url, headers=hds, data=data,proxies = proxy)
+    html_data = response.json()
+    return html_data
+
+
+def get_html_proxy(url, req, proxy):
+    hds = {'Cookie': 'os=pc; osver=Microsoft-Windows-8-Professional-build-9200-64bit; appver=1.5.0.75771;',
+           'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                         ' Chrome/35.0.1916.138 Safari/537.36',
+           'Referer': 'http://music.163.com/'}
+    # proxy = {'http': '114.214.164.38:9999'}
+    data = encrypted_request(req)
+    response = requests.post(url, headers=hds, data=data, proxies=proxy)
+    html_data = response.json()
+    return html_data
+
+
+if __name__ == '__main__':
+    id_track = 730859
+    url0 = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(id_track)
+    req0 = {"uid": id_track, "offset": "0", "csrf_token": "", "limit": "20"}
+    data0 = get_html(url0, req0)
+    print(datetime.datetime.now())
