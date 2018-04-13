@@ -4,7 +4,7 @@ from sqlio import *
 
 
 # 根据歌曲id获取第一页评论
-def get_comment(id_track):
+def get_comment_fp(id_track):
     # pages = 0
     # url_comment = 'http://music.163.com/api/v1/resource/comments/R_SO_4_' \
     #               + str(id_track) + '?limit=20&offset=' + str(pages)
@@ -29,6 +29,8 @@ def get_comment(id_track):
                 replied_user_id = replied_comment['user']['userId']
                 replied_content_comment = replied_comment['content']
             upd_sql_comment(id_comment, replied_user_name, replied_user_id, replied_content_comment)
+    if total_track_comment < 20:
+        upd_time_sql_comment(ids_track)
     return total_track_comment
 
 
@@ -59,27 +61,18 @@ def get_comment_x(id_track_m, pages):
 
 if __name__ == '__main__':
     list_track = get_sql_track()
-    track_num = 15028
+    track_num = 17406
     while 1 == 1:
         ids_track = list_track[track_num-1][0]
         names_track = list_track[track_num-1][1]
         try:
-            comment_count = get_comment(ids_track)
+            comment_count = get_comment_fp(ids_track)
             print(track_num, ids_track, names_track, comment_count)
-            if comment_count > 20:
-                for page in range(int((comment_count-1)/20)):
-                    get_comment_x(ids_track, page)
-                    time.sleep(0.1)
-            upd_time_sql_comment(ids_track)
             track_num += 1
-            time.sleep(0.4)
+            time.sleep(0.1)
         except Exception as e:
             print(track_num, ids_track, names_track, e)
             with open('track.txt', 'a') as file:
-                file.write('%s,%s,%s,%s\n' % (str(track_num), str(ids_track), names_track, str(e)))
+                file.write('%s,%s,%s,%s,%s\n' % (str(track_num), str(ids_track), names_track, str(e)))
             file.close()
             time.sleep(5)
-
-
-
-

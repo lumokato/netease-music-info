@@ -66,9 +66,9 @@ def get_html(url, req):
            'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko)'
                          ' Chrome/35.0.1916.138 Safari/537.36',
            'Referer': 'http://music.163.com/'}
-    proxy = {'http': '222.128.117.99:808'}
+    proxy = {'http': '127.0.0.1:1080'}
     data = encrypted_request(req)
-    response = requests.post(url, headers=hds, data=data,proxies = proxy)
+    response = requests.post(url, headers=hds, data=data)
     html_data = response.json()
     return html_data
 
@@ -86,8 +86,8 @@ def get_html_proxy(url, req, proxy):
 
 
 if __name__ == '__main__':
-    id_track = 730859
-    url0 = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(id_track)
-    req0 = {"uid": id_track, "offset": "0", "csrf_token": "", "limit": "20"}
+    id_track0 = 730859
+    url0 = 'http://music.163.com/weapi/v1/resource/comments/R_SO_4_' + str(id_track0)
+    req0 = {"uid": id_track0, "offset": "0", "csrf_token": "", "limit": "20"}
     data0 = get_html(url0, req0)
     print(datetime.datetime.now())
